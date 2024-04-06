@@ -15,6 +15,7 @@ import { PickListModule } from 'primeng/picklist';
 import { CategoryPopupComponent } from './components/shared/category-popup/category-popup.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
+import { ListboxModule } from 'primeng/listbox';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { DialogModule } from 'primeng/dialog';
     ButtonModule,
     PickListModule,
     DialogModule,
+    ListboxModule,
   ],
   providers: [DialogService],
   bootstrap: [AppComponent],

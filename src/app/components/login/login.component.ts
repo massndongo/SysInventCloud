@@ -7,6 +7,11 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 
+interface City {
+  name: string;
+  code: string;
+}
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,6 +21,9 @@ export class LoginComponent {
   loginForm!: FormGroup;
   errorMessage!: string;
   formSubmitted!: boolean;
+  cities!: City[];
+
+  selectedCity!: City;
   constructor(
     private fb: FormBuilder,
     // private authService: AuthService,
@@ -23,6 +31,13 @@ export class LoginComponent {
   ) {}
 
   ngOnInit(): void {
+    this.cities = [
+      { name: 'Boutique 1', code: 'NY' },
+      { name: 'Boutique 2', code: 'RM' },
+      { name: 'Boutique 3', code: 'LDN' },
+      { name: 'Boutique 4', code: 'IST' },
+      { name: 'Boutique 5', code: 'PRS' },
+    ];
     this.formSubmitted = false;
     this.loginForm = this.fb.group({
       Login: ['', Validators.required],
