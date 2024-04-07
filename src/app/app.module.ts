@@ -10,12 +10,13 @@ import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
-import { ListInventoryComponent } from './components/list-inventory/list-inventory.component';
+import { ListInventoryComponent } from './components/dashboard/list-inventory/list-inventory.component';
 import { PickListModule } from 'primeng/picklist';
 import { CategoryPopupComponent } from './components/shared/category-popup/category-popup.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ListboxModule } from 'primeng/listbox';
     LoginComponent,
     ListInventoryComponent,
     CategoryPopupComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
-import { CategoryPopupComponent } from '../shared/category-popup/category-popup.component';
+import { CategoryPopupComponent } from '../../shared/category-popup/category-popup.component';
 
 @Component({
   selector: 'app-list-inventory',

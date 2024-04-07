@@ -47,10 +47,9 @@ export class LoginComponent {
 
   onLogin(): void {
     this.formSubmitted = true;
-    console.log(this.loginForm);
 
     if (this.loginForm.valid) {
-      this.router.navigate(['/liste-inventaire']);
+      this.router.navigate(['/menu']);
     }
   }
 
