@@ -49,7 +49,7 @@ export class ListInventoryComponent {
           next: (response) => {
             if (response.OK === 1) {
               this.errorMsg = response.Autres
-              this.ngOnInit();
+              this.loadStock();
             } else if (response.OK === 0) {
               this.errorMsg = response.TxErreur
             }
@@ -70,14 +70,7 @@ export class ListInventoryComponent {
       PIECE: ['', Validators.required]
     })
     this.token = this.inventoryService.getToken();
-    this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
-      next: (response) => {
-        this.sourceProducts = response.Contenue.NON_INVENTORIE.slice(0, 10);
-
-        this.targetProducts = response.Contenue.INVENTORIE;
-        this.cdr.markForCheck();
-      }
-    })
+    this.loadStock();
   }
 
   showDialog() {
@@ -85,27 +78,41 @@ export class ListInventoryComponent {
       this.visible = true;
     }
   }
+  loadStock(){
+    this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
+      next: (response) => {
+        this.sourceProducts = response.Contenue.NON_INVENTORIE.slice(0, 10);
+        console.log(this.sourceProducts);
 
+        this.targetProducts = response.Contenue.INVENTORIE;
+        console.log(this.targetProducts);
+
+        this.cdr.markForCheck();
+      }
+    })
+  }
   openCategoryPopup(product: any) {
     this.selectedProduct = product;
   }
 
   onUpdate() {
-
     this.isSubmit = true;
     const valForm = this.updateForm.value;
     this.inventoryService.updateStock('SYSINVENT_SAVE_ARTICLE', this.selectedProduct.ID, valForm.CARTON, valForm.PIECE, this.token)
       .subscribe({
         next: (response) => {
           if (response.OK === 1) {
-            this.errorMsg = response.Autres
+            this.errorMsg = response.Autres;
+            this.loadStock();
+            this.visible = false;
           } else if (response.OK === 0) {
             this.errorMsg = response.TxErreur
           }
           this.ngOnInit();
         },
         error: (error) => {
-          this.errorMsg = error.error.TxErreur
+          this.errorMsg = error.error.TxErreur;
+          this.visible = false;
         }
       })
     // if (
@@ -144,10 +151,7 @@ export class ListInventoryComponent {
     }
   }
   cancel() {
-    if (this.selectedProduct) {
-      this.returnItemToSource(this.selectedProduct);
-      this.selectedProduct = null;
-      this.newCategory = '';
-    }
+    this.visible = false;
+    this.loadStock();
   }
 }

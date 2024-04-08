@@ -22,6 +22,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { InitializeComponent } from './components/dashboard/initialize/initialize.component';
 import { ReinitializeComponent } from './components/dashboard/reinitialize/reinitialize.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
+import { MessageService } from 'primeng/api';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,10 @@ import { HistoryComponent } from './components/dashboard/history/history.compone
     HttpClientModule,
     TableModule
   ],
-  providers: [DialogService],
+  providers: [DialogService, MessageService,
+
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

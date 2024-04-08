@@ -21,7 +21,7 @@ export class InventoryService {
   // Connexion et Obtention de token
   login(Login: string, Password: string, IDBOUTIQUE: number): Observable<any> {
     const params = { Login, Password, IDBOUTIQUE };
-    return this.http.post<any>(`${this.API_ROOT}auth.php`, {},  { params }).pipe(
+    return this.http.post<any>(`${this.API}`, {},  { params }).pipe(
       map(
         (response) => {
           if (response.OK === 1) {
