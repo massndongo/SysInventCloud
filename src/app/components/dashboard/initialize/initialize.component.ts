@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { InventoryService } from 'src/app/services/inventory.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class InitializeComponent implements OnInit{
 
   constructor(
     private inventoryService: InventoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private taostsService: ToastrService
   ) { }
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -35,13 +37,15 @@ export class InitializeComponent implements OnInit{
         .subscribe({
           next: (response) => {
             if (response.OK === 1) {
-              
+              this.taostsService.success(this.errorMsg)
             } else if(response.OK === 0){
               this.errorMsg = response.TxErreur
+              this.taostsService.error(this.errorMsg)
             }
           },
           error: (error) => {
             this.errorMsg = error.error.TxErreur
+            this.taostsService.error(this.errorMsg)
           }
         })
     }

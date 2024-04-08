@@ -92,7 +92,6 @@ export class ListInventoryComponent {
     this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
       next: (response) => {
         this.sourceProducts = response.Contenue.NON_INVENTORIE;
-        console.log(this.sourceProducts);
 
         this.targetProducts = response.Contenue.INVENTORIE;
         console.log(this.targetProducts);
