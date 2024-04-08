@@ -24,6 +24,7 @@ import { ReinitializeComponent } from './components/dashboard/reinitialize/reini
 import { HistoryComponent } from './components/dashboard/history/history.component';
 import { MessageService } from 'primeng/api';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,13 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     DialogModule,
     ListboxModule,
     HttpClientModule,
-    TableModule
+    TableModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      progressBar: false,
+      enableHtml: true,
+      positionClass: 'toast-top-center'
+    })
   ],
   providers: [DialogService, MessageService,
 

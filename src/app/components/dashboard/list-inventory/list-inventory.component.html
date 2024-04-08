@@ -2,7 +2,8 @@
   <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
     [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
     filterBy="Designation" sourceFilterPlaceholder="Rechercher par nom" targetFilterPlaceholder="Rechercher par nom"
-    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)" [showSourceControls]="false" [showTargetControls]="false">
+    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)"
+    [showSourceControls]="disbale" [showTargetControls]='disbale'>
     <ng-template let-product pTemplate="item">
       <div class="flex flex-wrap p-2 align-items-center gap-3">
         <div class="flex-1 flex flex-column gap-2">

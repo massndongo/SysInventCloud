@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Renderer2 } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
 import { CategoryPopupComponent } from '../../shared/category-popup/category-popup.component';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-inventory',
@@ -21,13 +22,16 @@ export class ListInventoryComponent {
   isSubmit!: boolean;
   visible: boolean = false;
   errorMsg!: string
+  disbale = false;
 
   constructor(
     private carService: ProductService,
     private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
     private inventoryService: InventoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private taostsService: ToastrService,
+    private renderer: Renderer2, private elementRef: ElementRef
   ) {}
   onItemMoved(event: any) {
     // Vérifiez si l'événement contient l'élément déplacé
@@ -49,22 +53,28 @@ export class ListInventoryComponent {
           next: (response) => {
             if (response.OK === 1) {
               this.errorMsg = response.Autres
+              this.taostsService.success(this.errorMsg, '', {timeOut: 10000})
               this.loadStock();
             } else if (response.OK === 0) {
               this.errorMsg = response.TxErreur
+              this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
             }
           },
           error: (error) => {
             this.errorMsg = error.error.TxErreur
+            this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
           },
         })
     }
   }
   ngOnInit() {
-    // this.carService.getProductsSmall().then((products) => {
-    //   this.sourceProducts = products;
-    //   this.cdr.markForCheck();
-    // });
+    // Désactiver les boutons de déplacement de tous les éléments dans la liste source
+    const sourceButtons = this.elementRef.nativeElement.querySelectorAll('.ui-picklist-buttons-source button');
+    sourceButtons.forEach((button: any) => {
+      if (button.classList.contains('ui-picklist-buttons-all')) {
+        this.renderer.setProperty(button, 'disabled', true);
+      }
+    });
     this.updateForm = this.fb.group({
       CARTON: ['', Validators.required],
       PIECE: ['', Validators.required]
@@ -103,16 +113,19 @@ export class ListInventoryComponent {
         next: (response) => {
           if (response.OK === 1) {
             this.errorMsg = response.Autres;
+            this.taostsService.success(this.errorMsg, '', {timeOut: 10000})
             this.loadStock();
             this.visible = false;
           } else if (response.OK === 0) {
             this.errorMsg = response.TxErreur
+            this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
           }
           this.ngOnInit();
         },
         error: (error) => {
           this.errorMsg = error.error.TxErreur;
           this.visible = false;
+          this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
         }
       })
     // if (
