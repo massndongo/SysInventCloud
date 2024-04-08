@@ -1,0 +1,27 @@
+  <p-table #dt1 [value]="stocks" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+  [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }"
+  currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="ID" style="width: 30%;"><p-sortIcon field="LABEL"></p-sortIcon>LABEL</th>
+      <th pSortableColumn="NOM" style="width: 30%;"><p-sortIcon field="DATE"></p-sortIcon>DATE</th>
+      <th pSortableColumn="NOM" style="width: 30%;"><p-sortIcon field="TIME"></p-sortIcon>TIME</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-stock>
+    <tr>
+      <td>{{stock.LABEL}}</td>
+      <td>{{stock.DATE}}</td>
+      <td>{{stock.TIME}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+      <tr>
+          <td colspan="7">{{errorMsg}}</td>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft">
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+  </ng-template>
+  </p-table>

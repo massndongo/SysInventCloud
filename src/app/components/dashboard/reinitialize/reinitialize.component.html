@@ -1,0 +1,24 @@
+<div class="flex flex-row justify-between mt-6">
+  <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+    Réinitialiser l'inventaire
+  </h1>
+</div>
+<form [formGroup]="form" (ngSubmit)="onReinitialize()" class="mt-4 lg:w-[75%] md:w-full sm:w-full">
+  <div *ngIf="errorMsg" class="flex">
+    <span class="text-sm text-red-800">{{ errorMsg }}</span>
+  </div>
+  <div class="mb-6">
+    <label for="" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe de réinitialisation</label>
+    <input formControlName="initPassword" id="" type="password" name="initPassword" required=""
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      placeholder="" required />
+      <span *ngIf="password?.hasError('required') && (isSubmit || password?.touched)"
+        class="text-red-600">Mot
+        de passe obligatoire</span>
+  </div>
+  <button
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    Initialiser
+  </button>
+</form>
+<!-- <p-toast></p-toast> -->

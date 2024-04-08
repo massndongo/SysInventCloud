@@ -2,10 +2,10 @@
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
     <h3>Liste des boutiques</h3>
     <div class="card flex justify-content-center mb-12">
-      <p-listbox [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" [filter]="true"
+      <p-listbox [options]="shops" [(ngModel)]="selectedShop" optionLabel="Nom" [filter]="true"
         [style]="{ width: '30rem' }" [listStyle]="{'max-height': '220px'}"></p-listbox>
     </div>
-    <div *ngIf="selectedCity"
+    <div *ngIf="selectedShop"
       class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
         <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">

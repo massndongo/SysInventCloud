@@ -1,4 +1,3 @@
-Reponse JSON pour l'obtention du Token
 {
     "OK": 1,
     "TxErreur": null,

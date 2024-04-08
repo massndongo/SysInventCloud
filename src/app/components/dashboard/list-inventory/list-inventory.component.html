@@ -1,8 +1,8 @@
 <div class="card">
-  <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="Available" targetHeader="Selected"
+  <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
     [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
-    filterBy="name" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name"
-    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)">
+    filterBy="Designation" sourceFilterPlaceholder="Rechercher par nom" targetFilterPlaceholder="Rechercher par nom"
+    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)">
     <!-- <ng-template let-product pTemplate="item">
           <div class="flex flex-wrap p-2 align-items-center gap-3">
               <img class="w-4rem shadow-2 flex-shrink-0 border-round" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" alt="{item.name}" />
@@ -18,16 +18,14 @@
       </ng-template> -->
     <ng-template let-product pTemplate="item">
       <div class="flex flex-wrap p-2 align-items-center gap-3">
-        <img class="w-4rem shadow-2 flex-shrink-0 border-round"
-          src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" alt="{item.name}" />
         <div class="flex-1 flex flex-column gap-2">
-          <span class="font-bold">{{ product.name }}</span>
+          <span class="font-bold">{{ product.Designation }}</span>
           <div class="flex align-products-center gap-2">
             <i class="pi pi-tag text-sm"></i>
-            <span>{{ product.category }}</span>
+            <!-- <span>{{ product.STOCK }}</span> -->
           </div>
         </div>
-        <span class="font-bold text-900">{{ '$' + product.price }}</span>
+        <span class="font-bold text-900">{{ product.PrixVenteTTC + ' FCFA' }}</span>
       </div>
     </ng-template>
   </p-pickList>
@@ -35,17 +33,24 @@
 
 
 <div class="card flex justify-content-center">
-  <p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" (onHide)="cancel()"
+  <p-dialog header="Mise à jour" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }" (onHide)="cancel()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
     <ng-template pTemplate="body">
-
-      <div>
-        <label for="newCategory">Nouvelle catégorie :</label>
-        <input type="text" id="newCategory" [(ngModel)]="newCategory" />
-      </div>
+      <form [formGroup]="updateForm" class="space-y-4 md:space-y-6" >
+        <div class="form-group">
+          <label for="CARTON"  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Carton :</label>
+          <input class="form-control" formControlName='CARTON' type="text" id="CARTON" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+        </div>
+        <div>
+          <label for="PIECE" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Piéce</label>
+          <input type="PIECE" formControlName='PIECE' name="PIECE" id="PIECE"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="name_company" required="">
+        </div>
+      </form>
     </ng-template>
     <ng-template pTemplate="footer">
-      <p-button icon="pi pi-check" (click)="submitCategory()" label="Ok" pAutoFocus [autofocus]="true"></p-button>
+      <p-button icon="pi pi-check" (click)="onUpdate()" label="Mettre à jour" pAutoFocus [autofocus]="true"></p-button>
     </ng-template>
   </p-dialog>
 </div>

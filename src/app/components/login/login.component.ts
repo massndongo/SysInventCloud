@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { InventoryService } from 'src/app/services/inventory.service';
 
 interface City {
   name: string;
@@ -22,15 +23,18 @@ export class LoginComponent {
   errorMessage!: string;
   formSubmitted!: boolean;
   cities!: City[];
+  shops!: any[];
 
   selectedCity!: City;
+  selectedShop: any;
   constructor(
     private fb: FormBuilder,
-    // private authService: AuthService,
+    private inventoryService: InventoryService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.loadShop();
     this.cities = [
       { name: 'Boutique 1', code: 'NY' },
       { name: 'Boutique 2', code: 'RM' },
@@ -47,10 +51,31 @@ export class LoginComponent {
 
   onLogin(): void {
     this.formSubmitted = true;
-
+    localStorage.setItem('MODEINVENTAIRE', this.selectedShop.MODEINVENTAIRE)
     if (this.loginForm.valid) {
-      this.router.navigate(['/menu']);
+      const val = this.loginForm.value;
+      this.inventoryService.login(val.Login, val.Password, this.selectedShop.id).subscribe({
+        next: (response) => {
+          if (this.selectedShop.MODEINVENTAIRE === '1') {
+            this.router.navigate(['/menu/reinitialiser']);
+          }
+          if (this.selectedShop.MODEINVENTAIRE === '0') {
+            this.router.navigate(['/menu/initialiser']);
+          }
+        },
+        error: (error) => {
+          this.errorMessage = error.error.TxErreur
+        }
+      })
+
     }
+  }
+  loadShop(){
+    this.inventoryService.shopList('LISTE_BOUTIQUE').subscribe({
+      next: (response) => {
+        this.shops = response.Contenue
+      }
+    })
   }
 
   get login() {

@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +17,11 @@ import { CategoryPopupComponent } from './components/shared/category-popup/categ
 import { DialogService } from 'primeng/dynamicdialog';
 import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
+import { TableModule } from 'primeng/table';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { InitializeComponent } from './components/dashboard/initialize/initialize.component';
+import { ReinitializeComponent } from './components/dashboard/reinitialize/reinitialize.component';
+import { HistoryComponent } from './components/dashboard/history/history.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +30,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     ListInventoryComponent,
     CategoryPopupComponent,
     DashboardComponent,
+    InitializeComponent,
+    ReinitializeComponent,
+    HistoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +47,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     PickListModule,
     DialogModule,
     ListboxModule,
+    HttpClientModule,
+    TableModule
   ],
   providers: [DialogService],
   bootstrap: [AppComponent],

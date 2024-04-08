@@ -1,14 +1,12 @@
-{
+[{
     "OK": 0,
     "TxErreur": "Opération impossible. Un inventaire est déjà en cour dans la boutique Boutique WhatsApp",
     "Source": "sysinvent_action.php",
     "Extra": null,
     "Autres": null,
     "Contenue": null
-}
+},
 
-
-//Re-Initialisation d'un inventaire avec mot de passe erroné
 {
     "OK": 0,
     "TxErreur": "Opération impossible. Le mot de passe ne correspond pas à celui ayant servit à initialisé l'inventairedans la boutique Boutique WhatsApp",
@@ -16,4 +14,4 @@
     "Extra": null,
     "Autres": null,
     "Contenue": null
-}
+}]
