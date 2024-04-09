@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, ElementRef, Renderer2 } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Product } from 'src/app/models/product';
-import { ProductService } from 'src/app/services/product.service';
 import { CategoryPopupComponent } from '../../shared/category-popup/category-popup.component';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { PickList } from 'primeng/picklist';
 
 @Component({
   selector: 'app-list-inventory',
@@ -13,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./list-inventory.component.scss'],
 })
 export class ListInventoryComponent {
+
+  @ViewChild('pickList', { static: false }) pickList!: PickList;
   sourceProducts!: any[];
   targetProducts!: any[];
   selectedProduct: any | null = null;
@@ -23,9 +25,9 @@ export class ListInventoryComponent {
   visible: boolean = false;
   errorMsg!: string
   disbale = false;
+  private movedItem: any | null = null;
 
   constructor(
-    private carService: ProductService,
     private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
     private inventoryService: InventoryService,
@@ -42,10 +44,14 @@ export class ListInventoryComponent {
       this.updateForm.patchValue({
         CARTON: this.selectedProduct.STOCK,
         PIECE: this.selectedProduct.STOCKDETAIL
-      })
+      });
+      this.movedItem = event.items[0];
     }
+
+    this.clearSearch();
   }
   onItemMovedToSource(event: any){
+    this.clearSearch();
     if (event.items && event.items.length > 0) {
       this.selectedProduct = event.items[0];
       this.inventoryService.cancelUpdateSTock('SYSINVENT_CANCELSAVE_ARTICLE', this.selectedProduct.ID, this.token)
@@ -54,7 +60,7 @@ export class ListInventoryComponent {
             if (response.OK === 1) {
               this.errorMsg = response.Autres
               this.taostsService.success(this.errorMsg, '', {timeOut: 10000})
-              this.loadStock();
+              // this.loadStock();
             } else if (response.OK === 0) {
               this.errorMsg = response.TxErreur
               this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
@@ -69,12 +75,6 @@ export class ListInventoryComponent {
   }
   ngOnInit() {
     // Désactiver les boutons de déplacement de tous les éléments dans la liste source
-    const sourceButtons = this.elementRef.nativeElement.querySelectorAll('.ui-picklist-buttons-source button');
-    sourceButtons.forEach((button: any) => {
-      if (button.classList.contains('ui-picklist-buttons-all')) {
-        this.renderer.setProperty(button, 'disabled', true);
-      }
-    });
     this.updateForm = this.fb.group({
       CARTON: ['', Validators.required],
       PIECE: ['', Validators.required]
@@ -82,7 +82,17 @@ export class ListInventoryComponent {
     this.token = this.inventoryService.getToken();
     this.loadStock();
   }
+  clearSearch() {
+    console.log('test');
 
+    if (this.pickList) {
+      const filterInput = this.pickList.el.nativeElement.querySelector('.p-picklist-filter-input');
+
+      if (filterInput) {
+        filterInput.value = ' ';
+      }
+    }
+  }
   showDialog() {
     if (this.selectedProduct) {
       this.visible = true;
@@ -92,11 +102,8 @@ export class ListInventoryComponent {
     this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
       next: (response) => {
         this.sourceProducts = response.Contenue.NON_INVENTORIE;
-
         this.targetProducts = response.Contenue.INVENTORIE;
-        console.log(this.targetProducts);
-
-        this.cdr.markForCheck();
+        // this.cdr.markForCheck();
       }
     })
   }
@@ -112,14 +119,20 @@ export class ListInventoryComponent {
         next: (response) => {
           if (response.OK === 1) {
             this.errorMsg = response.Autres;
-            this.taostsService.success(this.errorMsg, '', {timeOut: 10000})
-            this.loadStock();
+            this.taostsService.success(this.errorMsg, '', {timeOut: 10000});
+            this.sourceProducts = [...this.sourceProducts];
+            this.targetProducts.forEach(product => {
+              if (product.ID === this.selectedProduct.ID) {
+                product.STOCK = valForm.CARTON;
+                product.STOCKDETAIL = valForm.PIECE;
+              }
+            });
             this.visible = false;
+
           } else if (response.OK === 0) {
             this.errorMsg = response.TxErreur
             this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
           }
-          this.ngOnInit();
         },
         error: (error) => {
           this.errorMsg = error.error.TxErreur;
@@ -140,6 +153,7 @@ export class ListInventoryComponent {
     // }
   }
 
+
   updateCategoryInTarget(productId: string, newCategory: string) {
     const productToUpdate = this.targetProducts.find(
       (product) => product.id === productId
@@ -153,17 +167,22 @@ export class ListInventoryComponent {
     }
   }
 
-  returnItemToSource(product: Product) {
+
+  cancel() {
+    if (this.movedItem  && !this.isSubmit &&  this.movedItem) {
+      this.returnItemToSource(this.movedItem); // Déplacez l'élément de la cible vers la source
+      this.movedItem = null; // Remettez la variable temporaire à null
+    }
+    this.visible = false;
+  }
+
+  returnItemToSource(product: any) {
     const index = this.targetProducts.findIndex(
-      (item) => item.id === product.id
+      (item) => item === product
     );
     if (index !== -1) {
       this.sourceProducts.push(this.targetProducts[index]);
       this.targetProducts.splice(index, 1);
     }
-  }
-  cancel() {
-    this.visible = false;
-    this.loadStock();
   }
 }

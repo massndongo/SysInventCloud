@@ -1,5 +1,24 @@
+
+<!-- VALEUR_INVENTAIRE
+:
+ECART_ACHAT
+:
+819000
+ECART_VENTE
+:
+882000
+NB_ARTICLE
+:
+1
+VALEUR_ACHAT
+:
+819000
+VALEUR_VENTE
+:
+882000 -->
   <p-table #dt1 [value]="stocks" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
-  [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }"
+  [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }" selectionMode="single" [(selection)]="selectedStock"
+  (onRowSelect)="showDialog($event)" (onRowUnselect)="onRowUnselect($event)"
   currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
   <ng-template pTemplate="header">
     <tr>
@@ -9,7 +28,7 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-stock let-rowIndex="rowIndex">
-    <tr>
+    <tr  [pSelectableRow]="stock">
       <td>{{(rowIndex+1)}}</td>
       <td>{{stock.DATE}}</td>
       <td>{{stock.TIME}}</td>
@@ -25,3 +44,72 @@
   <ng-template pTemplate="paginatorright">
   </ng-template>
   </p-table>
+
+
+<div class="card flex justify-content-center">
+  <p-dialog header="Comparaison" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+    <ng-template pTemplate="body">
+      <div>
+        <p>
+          Voulez-vous comparer cet inventaire avec l'état précèdent?
+        </p>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <p-button icon="pi pi-check" (click)="onCompare()" label="Comparer" pAutoFocus [autofocus]="true"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+
+<br><br>
+<div *ngIf="data" class="flex-row">
+  <div *ngIf="data.VALEUR_INVENTAIRE">
+    <b>Ecart Achat: </b>{{data.VALEUR_INVENTAIRE.ECART_ACHAT}}<br>
+    <b>Ecart Vente:</b> {{data.VALEUR_INVENTAIRE.ECART_VENTE}}<br>
+    <b>Nombre Articles:</b> {{data.VALEUR_INVENTAIRE.NB_ARTICLE}}<br>
+    <b>Valeur Achat:</b> {{data.VALEUR_INVENTAIRE.VALEUR_ACHAT}}<br>
+    <b>Valeur Vente:</b> {{data.VALEUR_INVENTAIRE.VALEUR_VENTE}}<br>
+  </div>
+    <p>
+      <p-table [value]="data.LISTE_INVENTAIRE" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+      [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }"
+      currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+          <th pSortableColumn="Designation"><p-sortIcon field="Designation"></p-sortIcon>Désignation</th>
+          <th pSortableColumn="STOCK_CARTON_AVANT"><p-sortIcon field="STOCK_CARTON_AVANT"></p-sortIcon>STOCK_CARTON_AVANT</th>
+          <th pSortableColumn="STOCK_CARTON_APRES"><p-sortIcon field="STOCK_CARTON_APRES"></p-sortIcon>STOCK_CARTON_APRES</th>
+          <th pSortableColumn="STOCK_DETAIL_AVANT"><p-sortIcon field="STOCK_DETAIL_AVANT"></p-sortIcon>STOCK_DETAIL_AVANT</th>
+          <th pSortableColumn="STOCK_DETAIL_APRES"><p-sortIcon field="STOCK_DETAIL_APRES"></p-sortIcon>STOCK_DETAIL_APRES</th>
+          <th pSortableColumn="PrixAchatTTC"><p-sortIcon field="PrixAchatTTC"></p-sortIcon>PrixAchatTTC</th>
+          <th pSortableColumn="PrixVenteTTC"><p-sortIcon field="PrixVenteTTC"></p-sortIcon>PrixVenteTTC</th>
+          <th pSortableColumn="PrixDetail"><p-sortIcon field="PrixDetail"></p-sortIcon>PrixDetail</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-inventory let-rowIndex="rowIndex">
+        <tr  [pSelectableRow]="inventory">
+          <td>{{(rowIndex+1)}}</td>
+          <td>{{inventory.Designation}}</td>
+          <td>{{inventory.STOCK_CARTON_AVANT}}</td>
+          <td>{{inventory.STOCK_CARTON_APRES}}</td>
+          <td>{{inventory.STOCK_DETAIL_AVANT}}</td>
+          <td>{{inventory.STOCK_DETAIL_APRES}}</td>
+          <td>{{inventory.PrixAchatTTC}}</td>
+          <td>{{inventory.PrixVenteTTC}}</td>
+          <td>{{inventory.PrixDetail}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+          <tr>
+              <td colspan="7">{{errorMsg}}</td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft">
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+      </ng-template>
+      </p-table>
+    </p>
+</div>

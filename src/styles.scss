@@ -6,14 +6,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Masquer les boutons de déplacement de tous les éléments dans la liste source */
-.ui-picklist-source-controls button.ui-button.ui-picklist-buttons-all {
-  display: none !important;
-}
-// angledoublerighticon{
-//   display: none !important;
-// }
-// class="p-element p-ripple p-button-icon-only p-button p-component"
-// class="p-element p-ripple p-button-icon-only p-button p-component"
-

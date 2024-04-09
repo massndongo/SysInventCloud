@@ -74,4 +74,10 @@ export class InventoryService {
     const params = { Action, ID, Token };
     return this.http.get<any>(`${this.API}`, { params });
   }
+
+  //Comparer Inventaire
+  compare(Action: string = 'SYSINVENT_COMPARE', LABEL: string, Token: string): Observable<any> {
+    const params = { Action, LABEL, Token };
+    return this.http.get<any>(`${this.API}`, { params });
+  }
 }

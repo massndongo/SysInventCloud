@@ -1,5 +1,5 @@
 <div class="card">
-  <p-pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
+  <p-pickList #pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
     [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
     filterBy="Designation" sourceFilterPlaceholder="Rechercher par nom" targetFilterPlaceholder="Rechercher par nom"
     breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)"
@@ -10,7 +10,6 @@
           <span class="font-bold">{{ product.Designation }}</span>
           <div class="flex align-products-center gap-2">
             <i class="pi pi-tag text-sm"></i>
-            <!-- <span>{{ product.STOCK }}</span> -->
           </div>
         </div>
         <span class="font-bold text-900">{{ product.PrixVenteTTC + ' FCFA' }}</span>

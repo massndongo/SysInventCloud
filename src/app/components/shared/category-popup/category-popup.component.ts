@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-category-popup',
@@ -14,7 +13,6 @@ export class CategoryPopupComponent implements OnInit {
 
   constructor(
     private dialogRef: DynamicDialogRef,
-    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +27,6 @@ export class CategoryPopupComponent implements OnInit {
 
   saveCategory(category: string) {
     if (this.product.id) {
-      this.productService.updateCategory(this.product.id, category);
       this.dialogRef.close();
     }
   }
@@ -39,7 +36,6 @@ export class CategoryPopupComponent implements OnInit {
     if (this.newCategory.trim() !== '') {
       // Mettre à jour la catégorie du produit avec la nouvelle catégorie
       if (this.product.id) {
-        this.productService.updateCategory(this.product.id, this.newCategory);
         this.dialogRef.close(this.product);
       } else {
         console.error('Inexistant.');
