@@ -20,14 +20,14 @@
               d'utilisateur</label>
             <input type="Login" formControlName='Login' name="Login" id="Login"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="name_company" required="">
+              placeholder="nom utilisateur" required="">
             <span *ngIf="login?.hasError('required') && (login?.touched || formSubmitted)" class="text-red-600">Login
               Obligatoire</span>
           </div>
           <div>
             <label for="Password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de
               passe</label>
-            <input type="Password" formControlName="Password" name="Password" id="Password" placeholder="••••••••"
+            <input type="Password" formControlName="Password" name="Password" id="Password" placeholder="mot de passe"
               class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               required="">
             <span *ngIf="password?.hasError('required') && (formSubmitted || password?.touched)"

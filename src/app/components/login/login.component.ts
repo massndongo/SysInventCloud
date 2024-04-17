@@ -51,7 +51,9 @@ export class LoginComponent {
 
   onLogin(): void {
     this.formSubmitted = true;
-    localStorage.setItem('MODEINVENTAIRE', this.selectedShop.MODEINVENTAIRE)
+    localStorage.setItem('MODEINVENTAIRE', this.selectedShop.MODEINVENTAIRE);
+    localStorage.setItem('NOMBOUTIQUE', this.selectedShop.Nom);
+
     if (this.loginForm.valid) {
       const val = this.loginForm.value;
       this.inventoryService.login(val.Login, val.Password, this.selectedShop.id).subscribe({
