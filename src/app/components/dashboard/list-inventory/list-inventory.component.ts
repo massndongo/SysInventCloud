@@ -1,7 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { DialogService } from 'primeng/dynamicdialog';
-import { Product } from 'src/app/models/product';
-import { CategoryPopupComponent } from '../../shared/category-popup/category-popup.component';
+import { DialogService } from 'primeng/dynamicdialog';  
 import { InventoryService } from 'src/app/services/inventory.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';

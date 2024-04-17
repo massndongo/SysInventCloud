@@ -7,59 +7,39 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PanelModule } from 'primeng/panel';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
-import { ListInventoryComponent } from './components/dashboard/list-inventory/list-inventory.component';
-import { PickListModule } from 'primeng/picklist';
-import { CategoryPopupComponent } from './components/shared/category-popup/category-popup.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { DialogModule } from 'primeng/dialog';
 import { ListboxModule } from 'primeng/listbox';
-import { TableModule } from 'primeng/table';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { InitializeComponent } from './components/dashboard/initialize/initialize.component';
-import { ReinitializeComponent } from './components/dashboard/reinitialize/reinitialize.component';
-import { HistoryComponent } from './components/dashboard/history/history.component';
 import { MessageService } from 'primeng/api';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
+import { DashboardModule } from './components/dashboard/dashboard.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    ListInventoryComponent,
-    CategoryPopupComponent,
-    DashboardComponent,
-    InitializeComponent,
-    ReinitializeComponent,
-    HistoryComponent,
+    LoginComponent
   ],
   imports: [
+    DashboardModule,
     BrowserModule,
     RouterModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    PanelModule,
-    InputTextModule,
-    ButtonModule,
-    PickListModule,
-    DialogModule,
-    ListboxModule,
     HttpClientModule,
-    TableModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ListboxModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       progressBar: false,
       enableHtml: true,
-      positionClass: 'toast-top-center'
-    })
+      positionClass: 'toast-top-center',
+    }),
   ],
-  providers: [DialogService, MessageService,
+  providers: [
+    DialogService,
+    MessageService,
 
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
