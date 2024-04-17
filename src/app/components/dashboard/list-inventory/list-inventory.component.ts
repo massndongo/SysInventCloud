@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { DialogService } from 'primeng/dynamicdialog';  
+import { DialogService } from 'primeng/dynamicdialog';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -108,7 +108,9 @@ export class ListInventoryComponent {
   openCategoryPopup(product: any) {
     this.selectedProduct = product;
   }
-
+  allToSource(): void{
+    
+  }
   onUpdate() {
     this.isSubmit = true;
     const valForm = this.updateForm.value;

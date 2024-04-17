@@ -5,10 +5,12 @@ import { InitializeComponent } from './initialize/initialize.component';
 import { ReinitializeComponent } from './reinitialize/reinitialize.component';
 import { ListInventoryComponent } from './list-inventory/list-inventory.component';
 import { HistoryComponent } from './history/history.component';
+import { childActivateGuard } from 'src/app/guards/child-activate.guard';
 
 const routes: Routes = [
   {
     path: "menu", component: DashboardComponent,
+    canActivate: [childActivateGuard],
     children: [
       { path: '', component: ListInventoryComponent },
       { path: 'liste-inventaire', component: ListInventoryComponent },

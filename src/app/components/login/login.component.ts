@@ -27,6 +27,7 @@ export class LoginComponent {
 
   selectedCity!: City;
   selectedShop: any;
+  msgError: any;
   constructor(
     private fb: FormBuilder,
     private inventoryService: InventoryService,
@@ -58,11 +59,18 @@ export class LoginComponent {
       const val = this.loginForm.value;
       this.inventoryService.login(val.Login, val.Password, this.selectedShop.id).subscribe({
         next: (response) => {
-          if (this.selectedShop.MODEINVENTAIRE === '1') {
-            this.router.navigate(['/menu/reinitialiser']);
+          if (response.OK === 0) {
+            this.errorMessage = response.Extra;
           }
-          if (this.selectedShop.MODEINVENTAIRE === '0') {
-            this.router.navigate(['/menu/initialiser']);
+          else{
+            if (this.selectedShop.MODEINVENTAIRE === '1') {
+              this.router.navigate(['/menu/reinitialiser']);
+              console.log(response);
+
+            }
+            if (this.selectedShop.MODEINVENTAIRE === '0') {
+              this.router.navigate(['/menu/initialiser']);
+            }
           }
         },
         error: (error) => {

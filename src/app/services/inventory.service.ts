@@ -25,6 +25,8 @@ export class InventoryService {
       map(
         (response) => {
           if (response.OK === 1) {
+            console.log(response);
+
             localStorage.setItem('token', response.Extra);
             return response;
           } else {
