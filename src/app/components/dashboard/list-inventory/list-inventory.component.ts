@@ -81,7 +81,6 @@ export class ListInventoryComponent {
     this.loadStock();
   }
   clearSearch() {
-    console.log('test');
 
     if (this.pickList) {
       const filterInput = this.pickList.el.nativeElement.querySelector('.p-picklist-filter-input');
@@ -109,7 +108,7 @@ export class ListInventoryComponent {
     this.selectedProduct = product;
   }
   allToSource(): void{
-    
+
   }
   onUpdate() {
     this.isSubmit = true;

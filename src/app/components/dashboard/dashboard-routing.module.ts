@@ -10,7 +10,7 @@ import { childActivateGuard } from 'src/app/guards/child-activate.guard';
 const routes: Routes = [
   {
     path: "menu", component: DashboardComponent,
-    canActivate: [childActivateGuard],
+    // canActivate: [childActivateGuard],
     children: [
       { path: '', component: ListInventoryComponent },
       { path: 'liste-inventaire', component: ListInventoryComponent },

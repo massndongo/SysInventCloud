@@ -18,7 +18,7 @@ VALEUR_VENTE
 882000 -->
   <p-table #dt1 [value]="stocks" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
   [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }" selectionMode="single" [(selection)]="selectedStock"
-  (onRowSelect)="showDialog($event)" (onRowUnselect)="onRowUnselect($event)"
+  (onRowSelect)="showDialog($event)" (onRowUnselect)="  ($event)"
   currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
   <ng-template pTemplate="header">
     <tr>
@@ -65,13 +65,22 @@ VALEUR_VENTE
 <br><br>
 <div *ngIf="data" class="flex-row">
   <div *ngIf="data.VALEUR_INVENTAIRE">
-    <b>Ecart Achat: </b>{{data.VALEUR_INVENTAIRE.ECART_ACHAT}}<br>
-    <b>Ecart Vente:</b> {{data.VALEUR_INVENTAIRE.ECART_VENTE}}<br>
-    <b>Nombre Articles:</b> {{data.VALEUR_INVENTAIRE.NB_ARTICLE}}<br>
-    <b>Valeur Achat:</b> {{data.VALEUR_INVENTAIRE.VALEUR_ACHAT}}<br>
-    <b>Valeur Vente:</b> {{data.VALEUR_INVENTAIRE.VALEUR_VENTE}}<br>
+    <p #content>
+      <b>Ecart Achat: </b>{{data.VALEUR_INVENTAIRE.ECART_ACHAT}}<br>
+      <b>Ecart Vente:</b> {{data.VALEUR_INVENTAIRE.ECART_VENTE}}<br>
+      <b>Nombre Articles:</b> {{data.VALEUR_INVENTAIRE.NB_ARTICLE}}<br>
+      <b>Valeur Achat:</b> {{data.VALEUR_INVENTAIRE.VALEUR_ACHAT}}<br>
+      <b>Valeur Vente:</b> {{data.VALEUR_INVENTAIRE.VALEUR_VENTE}}<br>
+      <span class="text-white">Finn </span>
+    </p>
   </div>
-    <p>
+  <button  (click)="generatePDF()" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 mb-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+      <path stroke="currentColor" color="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17v-5h1.5a1.5 1.5 0 1 1 0 3H5m12 2v-5h2m-2 3h2M5 10V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1v6M5 19v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1M10 3v4a1 1 0 0 1-1 1H5m6 4v5h1.375A1.627 1.627 0 0 0 14 15.375v-1.75A1.627 1.627 0 0 0 12.375 12H11Z"/>
+    </svg>
+    Télécharger PDF
+  </button>
+    <!-- <p>
       <p-table [value]="data.LISTE_INVENTAIRE" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
       [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }"
       currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
@@ -111,5 +120,49 @@ VALEUR_VENTE
       <ng-template pTemplate="paginatorright">
       </ng-template>
       </p-table>
-    </p>
+    </p> -->
+</div>
+
+<div class="card mt-4" *ngIf="data">
+  <p-table #dt [value]="data.LISTE_INVENTAIRE" selectionMode="multiple" [exportHeader]="'customExportHeader'"
+    [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }"
+  currentPageReportTemplate="De {first} à {last} sur {totalRecords}" [rowsPerPageOptions]="[10, 25, 50]">
+      <ng-template pTemplate="caption">
+          <div class="flex">
+            <button  (click)="exportExcel()" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 mb-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+              <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" color="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+              </svg>
+              Exporter le tableau en Excel
+            </button>
+          </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+          <th pSortableColumn="Designation"><p-sortIcon field="Designation"></p-sortIcon>Désignation</th>
+          <th pSortableColumn="STOCK_CARTON_AVANT"><p-sortIcon field="STOCK_CARTON_AVANT"></p-sortIcon>STOCK_CARTON_AVANT</th>
+          <th pSortableColumn="STOCK_CARTON_APRES"><p-sortIcon field="STOCK_CARTON_APRES"></p-sortIcon>STOCK_CARTON_APRES</th>
+          <th pSortableColumn="STOCK_DETAIL_AVANT"><p-sortIcon field="STOCK_DETAIL_AVANT"></p-sortIcon>STOCK_DETAIL_AVANT</th>
+          <th pSortableColumn="STOCK_DETAIL_APRES"><p-sortIcon field="STOCK_DETAIL_APRES"></p-sortIcon>STOCK_DETAIL_APRES</th>
+          <th pSortableColumn="PrixAchatTTC"><p-sortIcon field="PrixAchatTTC"></p-sortIcon>PrixAchatTTC</th>
+          <th pSortableColumn="PrixVenteTTC"><p-sortIcon field="PrixVenteTTC"></p-sortIcon>PrixVenteTTC</th>
+          <th pSortableColumn="PrixDetail"><p-sortIcon field="PrixDetail"></p-sortIcon>PrixDetail</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-inventory let-rowIndex="rowIndex">
+        <tr  [pSelectableRow]="inventory">
+          <td>{{(rowIndex+1)}}</td>
+          <td>{{inventory.Designation}}</td>
+          <td>{{inventory.STOCK_CARTON_AVANT}}</td>
+          <td>{{inventory.STOCK_CARTON_APRES}}</td>
+          <td>{{inventory.STOCK_DETAIL_AVANT}}</td>
+          <td>{{inventory.STOCK_DETAIL_APRES}}</td>
+          <td>{{inventory.PrixAchatTTC}}</td>
+          <td>{{inventory.PrixVenteTTC}}</td>
+          <td>{{inventory.PrixDetail}}</td>
+        </tr>
+      </ng-template>
+  </p-table>
 </div>

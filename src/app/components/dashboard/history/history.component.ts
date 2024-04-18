@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import html2canvas from 'html2canvas';
 import { ToastrService } from 'ngx-toastr';
+import * as jspdf from 'jspdf';
+import * as FileSaver from 'file-saver';
 import { InventoryService } from 'src/app/services/inventory.service';
 
 @Component({
@@ -18,6 +21,39 @@ export class HistoryComponent implements OnInit{
   visible: boolean = false;
   data!: any
   infos!: boolean;
+  @ViewChild('content')
+  content!: ElementRef;
+  nomBoutique: any;
+
+
+  products!: any[];
+
+  selectedProducts!: any[];
+
+  cols!: Column[];
+
+  exportColumns!: ExportColumn[];
+
+  generatePDF() {
+    const data = this.content.nativeElement;
+
+    html2canvas(data).then(canvas => {
+
+      const imgWidth = 208;
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // orientation portrait
+      const position = 0;
+
+      pdf.text(`Résumé de l'inventaire de ${this.nomBoutique}`, 10, 10);
+      pdf.setFontSize(20);
+
+      const contentPosY = (pdf.internal.pageSize.height - imgHeight) / 2;
+
+      pdf.addImage(canvas.toDataURL('image/webp'), 'WEBP', 10, 20, imgWidth, imgHeight);
+      pdf.save('resume-inventaire.pdf'); // Télécharger le fichier PDF avec un nom donné
+    });
+  }
 
   constructor(
     private inventoryService: InventoryService,
@@ -25,12 +61,68 @@ export class HistoryComponent implements OnInit{
     private toastrService: ToastrService
   ) {}
   ngOnInit(): void {
+    this.products = [
+            {
+                id: '1000',
+                code: 'f230fh0g3',
+                name: 'Bamboo Watch',
+                description: 'Product Description',
+                image: 'bamboo-watch.jpg',
+                price: 65,
+                category: 'Accessories',
+                quantity: 24,
+                inventoryStatus: 'INSTOCK',
+                rating: 5
+            },
+            {
+                id: '1001',
+                code: 'nvklal433',
+                name: 'Black Watch',
+                description: 'Product Description',
+                image: 'black-watch.jpg',
+                price: 72,
+                category: 'Accessories',
+                quantity: 61,
+                inventoryStatus: 'OUTOFSTOCK',
+                rating: 4
+            }]
+    if (localStorage.getItem('NOMBOUTIQUE')) {
+      this.nomBoutique = localStorage.getItem('NOMBOUTIQUE');
+    }
     this.infos = false
     this.token = this.inventoryService.getToken();
     this.loadHistory();
     this.compareForm = this.fb.group({
       label: ['', Validators.required]
-    })
+    });
+
+
+    this.cols = [
+      { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
+      { field: 'name', header: 'Name' },
+      { field: 'category', header: 'Category' },
+      { field: 'quantity', header: 'Quantity' }
+    ];
+
+    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+  }
+
+  exportExcel() {
+      import('xlsx').then((xlsx) => {
+          const worksheet = xlsx.utils.json_to_sheet(this.data.LISTE_INVENTAIRE);
+          const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+          const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+          this.saveAsExcelFile(excelBuffer, 'produits');
+      });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+      let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      let EXCEL_EXTENSION = '.xlsx';
+      const data: Blob = new Blob([buffer], {
+          type: EXCEL_TYPE
+      });
+      FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
   showDialog(event: any) {
       this.visible = true;
@@ -55,9 +147,9 @@ export class HistoryComponent implements OnInit{
 
       })
   }
-get label(){
-  return this.compareForm.get('label')
-}
+  get label(){
+    return this.compareForm.get('label')
+  }
   onCompare(){
     this.isSubmit = true;
     this.inventoryService.compare('SYSINVENT_COMPARE', this.selectedStock.LABEL, this.token)
@@ -83,8 +175,20 @@ get label(){
   }
 
   onRowSelect(event: any) {
+  }
+
+  onRowUnselect(event: any) {
+  }
 }
 
-onRowUnselect(event: any) {
+
+interface Column {
+  field: string;
+  header: string;
+  customExportHeader?: string;
 }
+
+interface ExportColumn {
+  title: string;
+  dataKey: string;
 }

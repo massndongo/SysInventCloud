@@ -8,10 +8,6 @@ import {
 import { Router } from '@angular/router';
 import { InventoryService } from 'src/app/services/inventory.service';
 
-interface City {
-  name: string;
-  code: string;
-}
 
 @Component({
   selector: 'app-login',
@@ -22,10 +18,7 @@ export class LoginComponent {
   loginForm!: FormGroup;
   errorMessage!: string;
   formSubmitted!: boolean;
-  cities!: City[];
   shops!: any[];
-
-  selectedCity!: City;
   selectedShop: any;
   msgError: any;
   constructor(
@@ -36,13 +29,6 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loadShop();
-    this.cities = [
-      { name: 'Boutique 1', code: 'NY' },
-      { name: 'Boutique 2', code: 'RM' },
-      { name: 'Boutique 3', code: 'LDN' },
-      { name: 'Boutique 4', code: 'IST' },
-      { name: 'Boutique 5', code: 'PRS' },
-    ];
     this.formSubmitted = false;
     this.loginForm = this.fb.group({
       Login: ['', Validators.required],
@@ -65,7 +51,6 @@ export class LoginComponent {
           else{
             if (this.selectedShop.MODEINVENTAIRE === '1') {
               this.router.navigate(['/menu/reinitialiser']);
-              console.log(response);
 
             }
             if (this.selectedShop.MODEINVENTAIRE === '0') {

@@ -23,7 +23,6 @@ export class DashboardComponent implements OnInit{
     }
     if (localStorage.getItem('NOMBOUTIQUE')) {
       this.nomBoutique = localStorage.getItem('NOMBOUTIQUE');
-
     }
   }
 
