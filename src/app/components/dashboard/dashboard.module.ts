@@ -16,6 +16,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
     DialogModule,
     HttpClientModule,
     TableModule,
+    ProgressSpinnerModule
   ],
 })
 export class DashboardModule {}

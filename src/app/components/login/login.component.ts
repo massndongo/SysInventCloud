@@ -21,6 +21,7 @@ export class LoginComponent {
   shops!: any[];
   selectedShop: any;
   msgError: any;
+  loading!: boolean;
   constructor(
     private fb: FormBuilder,
     private inventoryService: InventoryService,
@@ -42,11 +43,13 @@ export class LoginComponent {
     localStorage.setItem('NOMBOUTIQUE', this.selectedShop.Nom);
 
     if (this.loginForm.valid) {
+      this.loading = true;
       const val = this.loginForm.value;
       this.inventoryService.login(val.Login, val.Password, this.selectedShop.id).subscribe({
         next: (response) => {
           if (response.OK === 0) {
             this.errorMessage = response.Extra;
+            this.loading = false;
           }
           else{
             if (this.selectedShop.MODEINVENTAIRE === '1') {
@@ -59,7 +62,8 @@ export class LoginComponent {
           }
         },
         error: (error) => {
-          this.errorMessage = error.error.TxErreur
+          this.errorMessage = error.error.TxErreur;
+          this.loading = false;
         }
       })
 

@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './components/dashboard/dashboard.module';
+import { ProgressSpinnerModule } from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DashboardModule } from './components/dashboard/dashboard.module';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ProgressSpinnerModule,
     ListboxModule,
     ToastrModule.forRoot({
       timeOut: 3000,

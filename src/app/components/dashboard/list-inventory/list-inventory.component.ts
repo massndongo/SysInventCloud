@@ -24,6 +24,7 @@ export class ListInventoryComponent {
   errorMsg!: string
   disbale = false;
   private movedItem: any | null = null;
+  loading!: boolean;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -34,10 +35,8 @@ export class ListInventoryComponent {
     private renderer: Renderer2, private elementRef: ElementRef
   ) {}
   onItemMoved(event: any) {
-    // Vérifiez si l'événement contient l'élément déplacé
     if (event.items && event.items.length > 0) {
       this.visible = true;
-      // Ouvrez le popup pour modifier la catégorie
       this.openCategoryPopup(event.items[0]);
       this.updateForm.patchValue({
         CARTON: this.selectedProduct.STOCK,
@@ -107,16 +106,18 @@ export class ListInventoryComponent {
   openCategoryPopup(product: any) {
     this.selectedProduct = product;
   }
-  allToSource(): void{
-
+  allToSource(event: any){
+    return []
   }
   onUpdate() {
     this.isSubmit = true;
+    this.loading = true;
     const valForm = this.updateForm.value;
     this.inventoryService.updateStock('SYSINVENT_SAVE_ARTICLE', this.selectedProduct.ID, valForm.CARTON, valForm.PIECE, this.token)
       .subscribe({
         next: (response) => {
           if (response.OK === 1) {
+            this.loading = false;
             this.errorMsg = response.Autres;
             this.taostsService.success(this.errorMsg, '', {timeOut: 10000});
             this.sourceProducts = [...this.sourceProducts];
@@ -129,14 +130,26 @@ export class ListInventoryComponent {
             this.visible = false;
 
           } else if (response.OK === 0) {
+            this.loading = false;
             this.errorMsg = response.TxErreur
             this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
+            this.sourceProducts = [...this.sourceProducts];
+            this.cancel()
           }
         },
         error: (error) => {
+          this.loading = false;
           this.errorMsg = error.error.TxErreur;
           this.visible = false;
-          this.taostsService.error(this.errorMsg, '', {timeOut: 10000})
+          this.taostsService.error("Erreur Connexion. Le produit n'est pas inventorié. Veuillez Recharger la page", '', {timeOut: 10000});
+          if (this.movedItem  && this.isSubmit) {
+            this.returnItemToSource(this.movedItem); // Déplacez l'élément de la cible vers la source
+            this.movedItem = null; // Remettez la variable temporaire à null
+            this.sourceProducts = [...this.sourceProducts];
+          }
+          this.visible = false;
+          // this.cancel();
+          // this.targetProducts = [...this.targetProducts];
         }
       })
     // if (
@@ -168,9 +181,10 @@ export class ListInventoryComponent {
 
 
   cancel() {
-    if (this.movedItem  && !this.isSubmit &&  this.movedItem) {
+    if (this.movedItem  && !this.isSubmit) {
       this.returnItemToSource(this.movedItem); // Déplacez l'élément de la cible vers la source
       this.movedItem = null; // Remettez la variable temporaire à null
+      this.sourceProducts = [...this.sourceProducts];
     }
     this.visible = false;
   }

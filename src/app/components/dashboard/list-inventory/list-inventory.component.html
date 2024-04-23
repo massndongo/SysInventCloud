@@ -2,7 +2,7 @@
   <p-pickList #pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
     [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
     filterBy="Designation" sourceFilterPlaceholder="Rechercher par nom" targetFilterPlaceholder="Rechercher par nom"
-    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)" (onMoveAllToTarget)="allToSource()" (onMoveAllToTarget)="allToSource()"
+    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)" (onMoveAllToTarget)="allToSource($event)" (onMoveAllToTarget)="allToSource($event)"
     [showSourceControls]="disbale" [showTargetControls]='disbale'>
     <ng-template let-product pTemplate="item">
       <div class="flex flex-wrap p-2 align-items-center gap-3">
@@ -38,6 +38,7 @@
       </form>
     </ng-template>
     <ng-template pTemplate="footer">
+        <p-progressSpinner *ngIf="loading" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
       <p-button icon="pi pi-check" (click)="onUpdate()" label="Mettre à jour" pAutoFocus [autofocus]="true"></p-button>
     </ng-template>
   </p-dialog>
