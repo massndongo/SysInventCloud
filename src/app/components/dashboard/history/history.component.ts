@@ -19,11 +19,13 @@ export class HistoryComponent implements OnInit{
   selectedStock!:any;
   compareForm!: FormGroup;
   visible: boolean = false;
-  data!: any
+  data!: any;
+  dateNow!: Date;
   infos!: boolean;
   @ViewChild('content')
   content!: ElementRef;
   nomBoutique: any;
+  viewDate!: boolean
 
 
   products!: any[];
@@ -35,23 +37,25 @@ export class HistoryComponent implements OnInit{
   exportColumns!: ExportColumn[];
 
   generatePDF() {
+    this.dateNow = new Date();
     const data = this.content.nativeElement;
-
     html2canvas(data).then(canvas => {
-
-      const imgWidth = 208;
+      const imgWidth = 350;
       const imgHeight = canvas.height * imgWidth / canvas.width;
-      const contentDataURL = canvas.toDataURL('image/png');
       const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // orientation portrait
-      const position = 0;
-
       pdf.text(`Résumé de l'inventaire de ${this.nomBoutique}`, 10, 10);
-      pdf.setFontSize(20);
+      pdf.text(`Date: le ${this.dateNow.toLocaleDateString()} à ${this.dateNow.toLocaleTimeString()}`, 10, 20);
+      pdf.text(`Ecart Achat: ${this.data.VALEUR_INVENTAIRE.ECART_ACHAT}`, 10, 40)
+      pdf.text(`Ecart Vente: ${this.data.VALEUR_INVENTAIRE.ECART_VENTE}`, 10, 60)
+      pdf.text(`Nombre Articles: ${this.data.VALEUR_INVENTAIRE.NB_ARTICLE}`, 10, 80)
+      pdf.text(`Valeur Achat: ${this.data.VALEUR_INVENTAIRE.VALEUR_ACHAT}`, 10, 100)
+      pdf.text(`Valeur Vente: ${this.data.VALEUR_INVENTAIRE.VALEUR_VENTE}`, 10, 120)
+      console.log(canvas);
 
-      const contentPosY = (pdf.internal.pageSize.height - imgHeight) / 2;
 
-      pdf.addImage(canvas.toDataURL('image/webp'), 'WEBP', 10, 20, imgWidth, imgHeight);
+      // pdf.addImage(canvas.toDataURL('image/webp'), 'WEBP', 10, 30, imgWidth, imgHeight);
       pdf.save('resume-inventaire.pdf'); // Télécharger le fichier PDF avec un nom donné
+      // this.viewDate = false
     });
   }
 
@@ -61,6 +65,7 @@ export class HistoryComponent implements OnInit{
     private toastrService: ToastrService
   ) {}
   ngOnInit(): void {
+
     this.products = [
             {
                 id: '1000',
@@ -108,11 +113,28 @@ export class HistoryComponent implements OnInit{
   }
 
   exportExcel() {
-      import('xlsx').then((xlsx) => {
-          const worksheet = xlsx.utils.json_to_sheet(this.data.LISTE_INVENTAIRE);
-          const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-          const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-          this.saveAsExcelFile(excelBuffer, 'produits');
+      import('xlsx').then((xlsx) => {// Sélectionner uniquement les attributs requis pour chaque élément de LISTE_INVENTAIRE
+        const dataToExport = this.data.LISTE_INVENTAIRE.map((item: any) => ({
+            ID: item.ID,
+            Designation: item.Designation,
+            Categorie: item.Categorie,
+            Rayon: item.Rayon,
+            ECART: item.ECART,
+            STOCK_CARTON_AVANT: item.STOCK_CARTON_AVANT,
+            STOCK_DETAIL_AVANT: item.STOCK_DETAIL_AVANT,
+            STOCK_CARTON_APRES: item.STOCK_CARTON_APRES,
+            STOCK_DETAIL_APRES: item.STOCK_DETAIL_APRES,
+            PrixDetail: item.PrixDetail,
+            PrixVenteTTC: item.PrixVenteTTC,
+            PrixAchatTTC: item.PrixAchatTTC,
+            PrixAchatDetail: item.PrixAchatDetail,
+            ECART_PRIXCESSION: item.ECART_PRIXCESSION,
+            ECART_PRIXVENTE: item.ECART_PRIXVENTE
+        }));
+        const worksheet = xlsx.utils.json_to_sheet(dataToExport);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+        const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, 'produits');
       });
   }
 
@@ -159,6 +181,7 @@ export class HistoryComponent implements OnInit{
             this.data = response.Contenue;
             this.visible = false;
             this.infos = true
+            console.log(this.data.LISTE_INVENTAIRE);
           }
           else if(response.OK === 0){
             this.toastrService.error(response.TxErreur, '', {timeOut: 10000});

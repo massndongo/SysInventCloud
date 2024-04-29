@@ -4,6 +4,7 @@ import { InventoryService } from 'src/app/services/inventory.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { PickList } from 'primeng/picklist';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-list-inventory',
@@ -11,6 +12,7 @@ import { PickList } from 'primeng/picklist';
   styleUrls: ['./list-inventory.component.scss'],
 })
 export class ListInventoryComponent {
+  Designation!: string;
 
   @ViewChild('pickList', { static: false }) pickList!: PickList;
   sourceProducts!: any[];
@@ -32,20 +34,18 @@ export class ListInventoryComponent {
     private inventoryService: InventoryService,
     private fb: FormBuilder,
     private taostsService: ToastrService,
-    private renderer: Renderer2, private elementRef: ElementRef
+    private renderer: Renderer2, private elementRef: ElementRef,
+    private primengConfig: PrimeNGConfig,
   ) {}
   onItemMoved(event: any) {
     if (event.items && event.items.length > 0) {
       this.visible = true;
-      this.openCategoryPopup(event.items[0]);
       this.updateForm.patchValue({
         CARTON: this.selectedProduct.STOCK,
         PIECE: this.selectedProduct.STOCKDETAIL
       });
       this.movedItem = event.items[0];
     }
-
-    this.clearSearch();
   }
   onItemMovedToSource(event: any){
     this.clearSearch();
@@ -78,14 +78,15 @@ export class ListInventoryComponent {
     })
     this.token = this.inventoryService.getToken();
     this.loadStock();
+    this.primengConfig.ripple = true;
   }
   clearSearch() {
-
     if (this.pickList) {
       const filterInput = this.pickList.el.nativeElement.querySelector('.p-picklist-filter-input');
 
       if (filterInput) {
-        filterInput.value = ' ';
+        filterInput.value = '';
+        this.updateSourceFromTarget();
       }
     }
   }
@@ -99,7 +100,7 @@ export class ListInventoryComponent {
       next: (response) => {
         this.sourceProducts = response.Contenue.NON_INVENTORIE;
         this.targetProducts = response.Contenue.INVENTORIE;
-        // this.cdr.markForCheck();
+        this.cdr.markForCheck();
       }
     })
   }
@@ -166,27 +167,33 @@ export class ListInventoryComponent {
   }
 
 
-  updateCategoryInTarget(productId: string, newCategory: string) {
-    const productToUpdate = this.targetProducts.find(
-      (product) => product.id === productId
-    );
-    if (productToUpdate) {
-      productToUpdate.category = newCategory;
-    } else {
-      console.error(
-        `Produit avec l'ID ${productId} introuvable dans la liste cible.`
-      );
-    }
+
+
+  updateSourceFromTarget() {
+    this.sourceProducts = [...this.sourceProducts];
+    this.targetProducts = [...this.targetProducts];
+    this.cdr.detectChanges();
+
   }
 
-
   cancel() {
-    if (this.movedItem  && !this.isSubmit) {
-      this.returnItemToSource(this.movedItem); // Déplacez l'élément de la cible vers la source
-      this.movedItem = null; // Remettez la variable temporaire à null
+    if (this.movedItem && !this.isSubmit) {
+      this.returnItemToSource(this.movedItem);
+      this.movedItem = null;
+      if (this.pickList) {
+        const filterInput = this.pickList.el.nativeElement.querySelector('.p-picklist-filter-input');
+
+        if (filterInput) {
+          filterInput.value = '';
+          this.updateSourceFromTarget();
+        }
+      }
       this.sourceProducts = [...this.sourceProducts];
     }
     this.visible = false;
+    this.updateSourceFromTarget();
+
+
   }
 
   returnItemToSource(product: any) {
@@ -194,8 +201,9 @@ export class ListInventoryComponent {
       (item) => item === product
     );
     if (index !== -1) {
-      this.sourceProducts.push(this.targetProducts[index]);
+      this.sourceProducts.unshift(this.targetProducts[index]);
       this.targetProducts.splice(index, 1);
     }
   }
+
 }

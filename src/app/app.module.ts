@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -15,6 +15,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './components/dashboard/dashboard.module';
 import { ProgressSpinnerModule } from "primeng/progressspinner";
+import { registerLocaleData } from "@angular/common";
+import * as fr from '@angular/common/locales/fr';
 
 @NgModule({
   declarations: [
@@ -42,9 +44,14 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
   providers: [
     DialogService,
     MessageService,
-
+    { provide: LOCALE_ID, useValue: 'fr-FR' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+
+  constructor() {
+    registerLocaleData(fr.default);
+  }
+}

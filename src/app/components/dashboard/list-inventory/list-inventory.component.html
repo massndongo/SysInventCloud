@@ -2,17 +2,32 @@
   <p-pickList #pickList [source]="sourceProducts" [target]="targetProducts" sourceHeader="NON_INVENTORIE" targetHeader="INVENTORIE"
     [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
     filterBy="Designation" sourceFilterPlaceholder="Rechercher par nom" targetFilterPlaceholder="Rechercher par nom"
-    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)" (onMoveAllToTarget)="allToSource($event)" (onMoveAllToTarget)="allToSource($event)"
+    breakpoint="1400px" (onMoveToTarget)="onItemMoved($event)" (onMoveToSource)="onItemMovedToSource($event)"
     [showSourceControls]="disbale" [showTargetControls]='disbale'>
     <ng-template let-product pTemplate="item">
-      <div class="flex flex-wrap p-2 align-items-center gap-3">
+      <!-- <div class="flex flex-wrap p-2 align-items-center gap-3">
         <div class="flex-1 flex flex-column gap-2">
           <span class="font-bold">{{ product.Designation }}</span>
-          <div class="flex align-products-center gap-2">
-            <i class="pi pi-tag text-sm"></i>
-          </div>
         </div>
         <span class="font-bold text-900">{{ product.PrixVenteTTC + ' FCFA' }}</span>
+      </div> -->
+        <div class="product-item">
+          <div class="product-list-detail">
+              <h5 class="mb-2 fw-bolder">Nom du produit</h5>
+              <span class="product-category">{{product.Designation}}</span>
+          </div>
+          <div class="product-list-detail">
+              <h5 class="mb-2">Cartons</h5>
+              <span class="product-category">{{product.STOCK}}</span>
+          </div>
+          <div class="product-list-detail">
+              <h5 class="mb-2">Pièces</h5>
+              <span class="product-category">{{product.STOCKDETAIL}}</span>
+          </div>
+          <div class="product-list-action">
+              <h5 class="mb-2">Prix de vente</h5>
+              <span >{{ product.PrixVenteTTC + ' FCFA' }}</span>
+          </div>
       </div>
     </ng-template>
   </p-pickList>

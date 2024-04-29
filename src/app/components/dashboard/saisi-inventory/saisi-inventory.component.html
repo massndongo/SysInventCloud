@@ -1,0 +1,144 @@
+<div class="relative bg-gray-100 mt-6 overflow-x-auto flex flex-col lg:flex-row">
+  <div class="card lg:w-[45%] w-full">
+    <h3 class="m-2">LISTE_PRODUITS_NON_INVENTORIE</h3>
+    <div class="flex flex-row justify-start w-full bg-light">
+      <div class="m-4 w-full">
+        <h3>Total: {{nombreSource}}</h3>
+      </div>
+      <div class="m-4 w-full">
+        <input type="text" [(ngModel)]="sourceFilter" (input)="filterSource()" placeholder="Rechercher par nom..."
+          class="block pt-2 mb-4 ps-10 text-sm text-gray-900 border border-gray-300 p-4 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+    </div>
+    <p-table #dt1 [value]="filterSourceProducts"  [scrollable]="true" scrollHeight="30rem" selectionMode="single"
+      [(selection)]="selectedProductSource" [loading]="loadingTable"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+              <th>Nom</th>
+              <th>Cartons</th>
+              <th>Pièces</th>
+              <th>Prix de vente</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr [pSelectableRow]="product">
+              <td>{{product.Designation}}</td>
+              <td>{{product.STOCK}}</td>
+              <td>{{product.STOCKDETAIL}}</td>
+              <td>{{ product.PrixVenteTTC + ' FCFA' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </div>
+
+  <div class="lg:w-[10%] w-full flex items-center justify-center hidden lg:flex">
+    <div class="row ">
+      <div class="col m-2">
+        <button (click)="onItemMoved(selectedProductSource)" type="button" [disabled]="!selectedProductSource" [ngClass]="selectedProductSource ? 'button-active' : 'button-disabled'">
+          <svg class="w-6 h-6 text-white-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+      <div class="col m-2">
+        <button type="button" (click)="itemMovedToSource(selectedProductTarget)" [disabled]="!selectedProductTarget"  [ngClass]="selectedProductTarget ? 'button-active' : 'button-disabled'">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+        </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full flex items-center justify-center lg:hidden">
+    <div class="row flex justify-content-center">
+      <div class="m-2">
+        <button type="button" (click)="onItemMoved(selectedProductSource)" [disabled]="!selectedProductSource" [ngClass]="selectedProductSource ? 'button-active' : 'button-disabled'">
+          <svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+          </svg>
+        </button>
+      </div>
+      <div class="m-2">
+        <button type="button" (click)="itemMovedToSource(selectedProductTarget)"  [disabled]="!selectedProductTarget"  [ngClass]="selectedProductTarget ? 'button-active' : 'button-disabled'">
+          <svg class="w-6 h-6 text-gray-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 15 7-7 7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card lg:w-[45%] w-full">
+    <h3 class="m-2">LISTE_PRODUITS_INVENTORIE</h3>
+    <div class="flex flex-row justify-start w-full">
+      <div class="m-4 w-full">
+        <h3>Total: {{nombreTarget}}</h3>
+      </div>
+      <div class="m-4 w-full">
+        <input type="text" [(ngModel)]="targetFilter" (input)="filterTarget()" placeholder="Rechercher par nom..."
+          class="block pt-2 mb-4 ps-10 text-sm text-gray-900 border border-gray-300 p-4 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      </div>
+    </div>
+    <p-table #dt2 [value]="filterTargetProducts" [scrollable]="true" scrollHeight="30rem" selectionMode="single"
+      [(selection)]="selectedProductTarget" [loading]="loadingTable"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+              <th>Nom</th>
+              <th>Cartons</th>
+              <th>Pièces</th>
+              <th>Prix de vente</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr [pSelectableRow]="product">
+              <td>{{product.Designation}}</td>
+              <td>{{product.STOCK}}</td>
+              <td>{{product.STOCKDETAIL}}</td>
+              <td>{{ product.PrixVenteTTC + ' FCFA' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<div class="card flex justify-content-center">
+  <p-dialog header="Mise à jour" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+    <ng-template pTemplate="body">
+      <form [formGroup]="updateForm" class="space-y-4 md:space-y-6" >
+        <div class="form-group">
+          <label for="CARTON" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Carton :</label>
+          <input class="form-control" formControlName='CARTON' type="number" id="CARTON" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+        </div>
+        <div>
+          <label for="PIECE" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Piéce</label>
+          <input type="number" formControlName='PIECE' name="PIECE" id="PIECE"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            required="">
+
+        </div>
+      </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <p-progressSpinner *ngIf="loading" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+      <p-button icon="pi pi-check" (click)="onUpdate()" label="Mettre à jour" pAutoFocus [autofocus]="true"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+
+<p-dialog header="Confirmation" [(visible)]="visibleCancel" [modal]="true" [style]="{ width: '20rem' }"
+[breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<ng-template pTemplate="body">
+  <div>
+    <p>
+      Voulez-vous annuler la mise à jour ?
+    </p>
+  </div>
+</ng-template>
+<ng-template pTemplate="footer">
+  <p-button (click)="cancelUpdate()" icon="pi pi-check" label="OK" pAutoFocus [autofocus]="true"></p-button>
+</ng-template>
+</p-dialog>
