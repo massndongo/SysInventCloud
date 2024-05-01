@@ -45,17 +45,13 @@ export class HistoryComponent implements OnInit{
       const pdf = new jspdf.jsPDF('p', 'mm', 'a4'); // orientation portrait
       pdf.text(`Résumé de l'inventaire de ${this.nomBoutique}`, 10, 10);
       pdf.text(`Date: le ${this.dateNow.toLocaleDateString()} à ${this.dateNow.toLocaleTimeString()}`, 10, 20);
-      pdf.text(`Ecart Achat: ${this.data.VALEUR_INVENTAIRE.ECART_ACHAT}`, 10, 40)
-      pdf.text(`Ecart Vente: ${this.data.VALEUR_INVENTAIRE.ECART_VENTE}`, 10, 60)
+      pdf.text(`Ecart Achat: ${this.data.VALEUR_INVENTAIRE.ECART_ACHAT.toLocaleString('fr-FR', {style: 'currency', currency: 'XOF'}).replace(/\s+/g, ' ')}`, 10, 40)
+      pdf.text(`Ecart Vente: ${this.data.VALEUR_INVENTAIRE.ECART_VENTE.toLocaleString('fr-FR', {style: 'currency', currency: 'XOF'}).replace(/\s+/g, ' ')}`, 10, 60)
       pdf.text(`Nombre Articles: ${this.data.VALEUR_INVENTAIRE.NB_ARTICLE}`, 10, 80)
-      pdf.text(`Valeur Achat: ${this.data.VALEUR_INVENTAIRE.VALEUR_ACHAT}`, 10, 100)
-      pdf.text(`Valeur Vente: ${this.data.VALEUR_INVENTAIRE.VALEUR_VENTE}`, 10, 120)
-      console.log(canvas);
+      pdf.text(`Valeur Achat: ${this.data.VALEUR_INVENTAIRE.VALEUR_ACHAT.toLocaleString('fr-FR', {style: 'currency', currency: 'XOF'}).replace(/\s+/g, ' ')}`, 10, 100)
+      pdf.text(`Valeur Vente: ${this.data.VALEUR_INVENTAIRE.VALEUR_VENTE.toLocaleString('fr-FR', {style: 'currency', currency: 'XOF'}).replace(/\s+/g, ' ')}`, 10, 120)
 
-
-      // pdf.addImage(canvas.toDataURL('image/webp'), 'WEBP', 10, 30, imgWidth, imgHeight);
-      pdf.save('resume-inventaire.pdf'); // Télécharger le fichier PDF avec un nom donné
-      // this.viewDate = false
+      pdf.save('resume-inventaire.pdf');
     });
   }
 
@@ -181,7 +177,6 @@ export class HistoryComponent implements OnInit{
             this.data = response.Contenue;
             this.visible = false;
             this.infos = true
-            console.log(this.data.LISTE_INVENTAIRE);
           }
           else if(response.OK === 0){
             this.toastrService.error(response.TxErreur, '', {timeOut: 10000});

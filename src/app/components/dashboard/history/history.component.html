@@ -48,11 +48,11 @@
 <div *ngIf="data" class="flex-row">
   <div *ngIf="data.VALEUR_INVENTAIRE">
     <p #content>
-      <b>Ecart Achat: </b>{{data.VALEUR_INVENTAIRE.ECART_ACHAT}}<br><br>
-      <b>Ecart Vente:</b> {{data.VALEUR_INVENTAIRE.ECART_VENTE}}<br><br>
+      <b>Ecart Achat: </b>{{data.VALEUR_INVENTAIRE.ECART_ACHAT | currency: 'XOF'}}<br><br>
+      <b>Ecart Vente:</b> {{data.VALEUR_INVENTAIRE.ECART_VENTE | currency: 'XOF'}}<br><br>
       <b>Nombre Articles:</b> {{data.VALEUR_INVENTAIRE.NB_ARTICLE}}<br><br>
-      <b>Valeur Achat:</b> {{data.VALEUR_INVENTAIRE.VALEUR_ACHAT}}<br><br>
-      <b>Valeur Vente:</b> {{data.VALEUR_INVENTAIRE.VALEUR_VENTE}}<br><br>
+      <b>Valeur Achat:</b> {{data.VALEUR_INVENTAIRE.VALEUR_ACHAT | currency: 'XOF'}}<br><br>
+      <b>Valeur Vente:</b> {{data.VALEUR_INVENTAIRE.VALEUR_VENTE | currency: 'XOF'}}<br><br>
       <!-- <b>Date: </b> {{dateNow | date: 'le dd MMMM yyyy à HH:mm'}}<br><br> -->
       <span class="text-white">Finn </span>
     </p>

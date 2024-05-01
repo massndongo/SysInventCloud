@@ -73,7 +73,6 @@ export class SaisiInventoryComponent implements OnInit{
 
   onItemMoved(selectedProduct: any) {
     if (selectedProduct) {
-      console.log(selectedProduct);
       this.visible = true;
       this.updateForm.patchValue({
         CARTON: selectedProduct.STOCK,
@@ -125,7 +124,6 @@ export class SaisiInventoryComponent implements OnInit{
     this.isSubmit = true;
     this.loading = true;
     const valForm = this.updateForm.value;
-    console.log(valForm);
 
     this.inventoryService.updateStock('SYSINVENT_SAVE_ARTICLE', this.movedItem.ID, valForm.CARTON, valForm.PIECE, this.token)
       .subscribe({
