@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "sysinventcloud",
+            "outputPath": "dist",
             "index": "src/index.html",
             "baseHref": "/sysinventcloud/",
             "main": "src/main.ts",
