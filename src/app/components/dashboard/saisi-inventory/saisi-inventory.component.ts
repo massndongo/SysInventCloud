@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { ToastrService } from 'ngx-toastr';
 import { PrimeNGConfig } from 'primeng/api';
 import { InventoryService } from 'src/app/services/inventory.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-saisi-inventory',
@@ -34,40 +35,68 @@ export class SaisiInventoryComponent implements OnInit{
   loading!: boolean;
   visibleCancel!: boolean;
   loadingTable!: boolean;
+  searchControl = new FormControl('');
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private inventoryService: InventoryService,
     private fb: FormBuilder,
     private taostsService: ToastrService,
-    private primengConfig: PrimeNGConfig,
   ) {}
 
   ngOnInit(): void {
     this.token = this.inventoryService.getToken();
-    this.loadStock();
     this.updateForm = this.fb.group({
       CARTON: ['', Validators.required],
       PIECE: ['', Validators.required]
-    })
+    });
+    
+    this.initializeSearch();
+    // this.loadStock();
   }
 
 
-  loadStock(){
-    this.loadingTable = true;
-    this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
-      next: (response) => {
-        if (response.OK === 1) {
+  // loadStock(){
+  //   this.loadingTable = true;
+  //   this.inventoryService.stockList('SYSINVENT_LISTE_ARTILCE', this.token).subscribe({
+  //     next: (response) => {
+  //       if (response.OK === 1) {
+  //         this.loadingTable = false;
+  //         this.sourceProducts = response.Contenue.NON_INVENTORIE;
+  //         this.filterSourceProducts = this.sourceProducts;
+  //         this.targetProducts = response.Contenue.INVENTORIE;
+  //         this.filterTargetProducts = this.targetProducts;
+  //         this.nombreSource = this.sourceProducts.length;
+  //         this.nombreTarget = this.targetProducts.length
+  //       }
+  //     }
+  //   })
+  // }
+
+  initializeSearch() {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap((query: any) => this.inventoryService.searchProducts('SYSINVENT_LISTE_ARTILCE',this.token, query))
+      )
+      .subscribe({
+        next: (products: any) => {
+          // this.filterSourceProducts = products.Contenue.NON_INVENTORIE;
+          // console.log(this.filterSourceProducts);
+          // this.nombreSource = this.filterSourceProducts.length;
+          console.log(this.searchControl.value);
           this.loadingTable = false;
-          this.sourceProducts = response.Contenue.NON_INVENTORIE;
+          this.sourceProducts = products.Contenue.NON_INVENTORIE;
           this.filterSourceProducts = this.sourceProducts;
-          this.targetProducts = response.Contenue.INVENTORIE;
+          this.targetProducts = products.Contenue.INVENTORIE;
           this.filterTargetProducts = this.targetProducts;
           this.nombreSource = this.sourceProducts.length;
           this.nombreTarget = this.targetProducts.length
+        },
+        error: (error) => {
+          console.error('Erreur de recherche:', error);
         }
-      }
-    })
+      });
   }
 
 

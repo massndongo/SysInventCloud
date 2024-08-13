@@ -61,7 +61,22 @@ export class InventoryService {
   // Liste Stock
   stockList(Action: string = 'SYSINVENT_LISTE_ARTILCE', Token: string): Observable<any> {
     const params = { Action, Token };
-    return this.http.get<any>(`${this.API}`, { params });
+    return this.http.get<any>(`${this.API}`, { params }).pipe(
+      map(
+        (response: any) => {
+          if (response.OK === 1) {
+            response.Contenue.NON_INVENTORIE = response.Contenue.NON_INVENTORIE.slice(0, 20);
+            // response.Contenue.INVENTORIE = response.Contenue.INVENTORIE.slice(0, 20);
+          }
+          return response
+        }
+      )
+    );
+  }
+
+
+  searchProducts(Action: string, Token: string, term: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API}/?Action=${Action}&Token=${Token}&DESIGNATION=${term}`);
   }
 
   // Mise à jour du stock
