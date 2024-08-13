@@ -23,6 +23,7 @@
     "file-saver": "^2.0.5",
     "flowbite": "^2.3.0",
     "html2canvas": "^1.4.1",
+    "inventory": "file:",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
     "jwt-decode": "^4.0.0",
