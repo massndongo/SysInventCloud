@@ -34,9 +34,11 @@ export class InventoryService {
         })
     );
   }
+  
   getToken() {
     return localStorage.getItem('token');
   }
+
   //Protection des routes
   isAuthenticated(): boolean {
     return this.getToken != null ? true : false;
@@ -47,11 +49,13 @@ export class InventoryService {
     const params = { Action, INIT_PASSWORD, Token };
     return this.http.get<any>(`${this.API}`, { params });
   }
+
   //Reinitialiser
   reinitialize(Action: string = 'SYSINVENT_RE_INITINVENTAIRE', INIT_PASSWORD: string, Token: string): Observable<any> {
     const params = { Action, INIT_PASSWORD, Token };
     return this.http.get<any>(`${this.API}`, { params });
   }
+
   //Historiques
   HistoryList(Action: string = 'SYSINVENT_HISTORIQUE_INVENTAIRE', Token: string): Observable<any> {
     const params = { Action, Token };

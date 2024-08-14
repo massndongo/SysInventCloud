@@ -2,8 +2,12 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { ToastrService } from 'ngx-toastr';
-import { PrimeNGConfig } from 'primeng/api';
+import { LazyLoadEvent, PrimeNGConfig } from 'primeng/api';
 import { InventoryService } from 'src/app/services/inventory.service';
+interface Column {
+  field: string;
+  header: string;
+}
 
 @Component({
   selector: 'app-saisi-inventory',
@@ -12,6 +16,7 @@ import { InventoryService } from 'src/app/services/inventory.service';
 })
 export class SaisiInventoryComponent implements OnInit{
   sourceProducts!: any[];
+  sourceProductsVirtual!: any[];
   filterSourceProducts!: any[];
   targetProducts!: any[];
   filterTargetProducts!: any[];
@@ -34,6 +39,7 @@ export class SaisiInventoryComponent implements OnInit{
   loading!: boolean;
   visibleCancel!: boolean;
   loadingTable!: boolean;
+  cols!: Column[];
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -45,12 +51,39 @@ export class SaisiInventoryComponent implements OnInit{
 
   ngOnInit(): void {
     this.token = this.inventoryService.getToken();
+    this.cols = [
+        { field: 'Designation', header: 'Nom' },
+        { field: 'STOCK', header: 'Cartons' },
+        { field: 'STOCKDETAIL', header: 'Pièces' },
+        { field: 'PrixVenteTTC', header: 'Prix de vente' }
+    ];
+    this.sourceProductsVirtual = Array.from({ length: 10000 });
     this.loadStock();
     this.updateForm = this.fb.group({
       CARTON: ['', Validators.required],
       PIECE: ['', Validators.required]
     })
   }
+
+
+  loadProductsLazy(event: LazyLoadEvent) {
+    //simulate remote connection with a timeout
+    setTimeout(() => {
+        if (event.first !== undefined && event.rows !== undefined) {
+            //load data of required page
+            let loadedProducts = this.sourceProducts.slice(event.first, event.first + event.rows);
+
+            //populate page of virtual cars
+            this.sourceProductsVirtual.splice(event.first, event.rows, ...loadedProducts);
+
+          //trigger change detection only if forceUpdate is defined
+          if (event.forceUpdate) {
+            event.forceUpdate();
+          }
+        }
+    }, Math.random() * 1000 + 250);
+}
+
 
 
   loadStock(){
