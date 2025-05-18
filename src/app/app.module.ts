@@ -18,6 +18,12 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { registerLocaleData } from "@angular/common";
 import * as fr from '@angular/common/locales/fr';
 
+import { AccordionModule } from 'primeng/accordion';
+import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radioButton';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,10 +46,16 @@ import * as fr from '@angular/common/locales/fr';
       enableHtml: true,
       positionClass: 'toast-top-center',
     }),
+    AccordionModule,
+    PanelModule,
+    ButtonModule,
+    RadioButtonModule,
+    AutoCompleteModule
   ],
   providers: [
     DialogService,
     MessageService,
+    
     { provide: LOCALE_ID, useValue: 'fr-FR' },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
   ],

@@ -68,6 +68,12 @@ export class InventoryService {
     return this.http.get<any>(`${this.API}`, { params });
   }
 
+  // Recuperer un ou plusieur article par la recherche
+  getProduit(Action: string = 'SYSINVENT_GETPRODUIT', DESIGNATION: string, Token: string): Observable<xNotification> {
+    const params = { Action, DESIGNATION, Token };
+    return this.http.get<xNotification>(`${this.API}`, { params });
+  }
+
   // Mise à jour du stock
   updateStock(Action: string = 'SYSINVENT_SAVE_ARTICLE', ID: number, CARTON: number, PIECE: number, Token: string): Observable<any> {
     const params = { Action, ID, CARTON, PIECE, Token };
@@ -85,4 +91,13 @@ export class InventoryService {
     const params = { Action, LABEL, Token };
     return this.http.get<any>(`${this.API}`, { params });
   }
+}
+
+export class xNotification {
+  OK: number = 0;
+  TxErreur?: string;
+  Source?: any;
+  Autres?: any;
+  Contenue?: any;
+  Extra?: any;
 }

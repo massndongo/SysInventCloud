@@ -18,6 +18,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { SaisiInventoryComponent } from './saisi-inventory/saisi-inventory.component';
+import { SaisiInventaireLightComponent } from './saisi-inventaire-light/saisi-inventaire-light.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SaisiInventoryComponent } from './saisi-inventory/saisi-inventory.compo
     InitializeComponent,
     ReinitializeComponent,
     DashboardComponent,
-    SaisiInventoryComponent
+    SaisiInventoryComponent,
+    SaisiInventaireLightComponent
   ],
   imports: [
     CommonModule,
