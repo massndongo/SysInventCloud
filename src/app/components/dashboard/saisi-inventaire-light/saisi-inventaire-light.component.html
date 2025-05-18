@@ -6,8 +6,9 @@
       
       (completeMethod)="filterItems($event)"
       field="name"
+      [placeholder]="'Rechercher un article par son nom ou son code barre...'"
       
-      
+      [suggestions]="filteredItems"
       class="w-full"
     ></p-autoComplete>
   </div>

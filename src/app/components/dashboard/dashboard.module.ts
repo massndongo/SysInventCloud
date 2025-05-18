@@ -19,6 +19,7 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { SaisiInventoryComponent } from './saisi-inventory/saisi-inventory.component';
 import { SaisiInventaireLightComponent } from './saisi-inventaire-light/saisi-inventaire-light.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SaisiInventaireLightComponent } from './saisi-inventaire-light/saisi-in
     DialogModule,
     HttpClientModule,
     TableModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    AutoCompleteModule,
   ],
 })
 export class DashboardModule {}

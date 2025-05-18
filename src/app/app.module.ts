@@ -18,7 +18,7 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { registerLocaleData } from "@angular/common";
 import * as fr from '@angular/common/locales/fr';
 
-import { AccordionModule } from 'primeng/accordion';
+//import { AccordionModule } from 'primeng/accordion';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radioButton';
@@ -47,7 +47,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
       positionClass: 'toast-top-center',
     }),
     AccordionModule,
-    PanelModule,
+    
     ButtonModule,
     RadioButtonModule,
     AutoCompleteModule

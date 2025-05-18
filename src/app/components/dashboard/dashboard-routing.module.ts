@@ -7,13 +7,15 @@ import { ListInventoryComponent } from './list-inventory/list-inventory.componen
 import { HistoryComponent } from './history/history.component';
 import { childActivateGuard } from 'src/app/guards/child-activate.guard';
 import { SaisiInventoryComponent } from './saisi-inventory/saisi-inventory.component';
+import { SaisiInventaireLightComponent } from './saisi-inventaire-light/saisi-inventaire-light.component';
 
 const routes: Routes = [
   {
     path: "menu", component: DashboardComponent,
     // canActivate: [childActivateGuard],
     children: [
-      { path: '', component: SaisiInventoryComponent },
+      { path: '', component: SaisiInventaireLightComponent },
+      {path: 'saisi-inventaire', component: SaisiInventoryComponent},
       { path: 'liste-inventaire', component: SaisiInventoryComponent },
       { path: 'initialiser', component: InitializeComponent },
       { path: 'reinitialiser', component: ReinitializeComponent },
