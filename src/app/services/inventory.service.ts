@@ -69,8 +69,18 @@ export class InventoryService {
   }
 
   // Recuperer un ou plusieur article par la recherche
-  getProduit(Action: string = 'SYSINVENT_GETPRODUIT', DESIGNATION: string, Token: string): Observable<xNotification> {
-    const params = { Action, DESIGNATION, Token };
+  getProduit(DESIGNATION: string): Observable<xNotification> {
+    const Action: string = 'SYSINVENT_GETPRODUIT' ;
+    const Token = this.getToken();
+    const CODEBAR = DESIGNATION ;
+
+    if (Token === null) {
+      return new Observable<any>(observer => {
+        observer.error('Token is null');
+        observer.complete();
+      });
+    }
+    const params = { Action, DESIGNATION,CODEBAR, Token };
     return this.http.get<xNotification>(`${this.API}`, { params });
   }
 

@@ -19,10 +19,10 @@ import { registerLocaleData } from "@angular/common";
 import * as fr from '@angular/common/locales/fr';
 
 //import { AccordionModule } from 'primeng/accordion';
-import { PanelModule } from 'primeng/panel';
+//import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
-import { RadioButtonModule } from 'primeng/radioButton';
-import { AutoCompleteModule } from 'primeng/autocomplete';
+//import { RadioButtonModule } from 'primeng/radioButton';
+//import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @NgModule({
   declarations: [
@@ -45,12 +45,9 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
       progressBar: false,
       enableHtml: true,
       positionClass: 'toast-top-center',
-    }),
-    AccordionModule,
-    
+    }),    
     ButtonModule,
-    RadioButtonModule,
-    AutoCompleteModule
+    
   ],
   providers: [
     DialogService,

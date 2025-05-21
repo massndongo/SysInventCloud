@@ -20,6 +20,8 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { SaisiInventoryComponent } from './saisi-inventory/saisi-inventory.component';
 import { SaisiInventaireLightComponent } from './saisi-inventaire-light/saisi-inventaire-light.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { MessageModule } from 'primeng/message';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     TableModule,
     ProgressSpinnerModule,
     AutoCompleteModule,
+    MessageModule,
+    CheckboxModule,
   ],
 })
 export class DashboardModule {}

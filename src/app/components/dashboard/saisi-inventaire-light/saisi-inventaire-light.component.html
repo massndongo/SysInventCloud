@@ -1,15 +1,65 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
   <h1 class="text-3xl font-bold mb-8">Recherche Produits</h1>
   <div class="w-full max-w-md">
-    <p-autoComplete 
-      [(ngModel)]="selectedItem"
-      
+    <p-autoComplete #autoCompleteRef
+      [(ngModel)]="selectedPdt"
+      (onSelect)="onProduitSelect($event)"
       (completeMethod)="filterItems($event)"
-      field="name"
+      field="nom"
       [placeholder]="'Rechercher un article par son nom ou son code barre...'"
       
       [suggestions]="filteredItems"
       class="w-full"
     ></p-autoComplete>
   </div>
+
+  <div class="card flex justify-content-center">
+    <p-dialog header="MISE A JOUR DU STOK" [(visible)]="visible" [modal]="true" [style]="{ width: '50rem' }"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+      <ng-template pTemplate="body">
+        <p-button pButton pRipple severity="success">
+           <span pButtonLabel>{{this.selectedPdt.Designation}}</span>
+        </p-button>
+        <form [formGroup]="updateForm" class="space-y-4 md:space-y-6" >
+          <div class="form-group">
+            <label for="CARTON" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Carton :</label>
+            <input class="form-control" formControlName='CARTON' type="number" id="CARTON" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+          </div>
+          <div>
+            <label for="PIECE" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantité Piéce</label>
+            <input type="number" formControlName='PIECE' name="PIECE" id="PIECE"
+              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              required="">
+          </div>
+        </form>
+        <div *ngIf="this.selectedPdt.SYSINVENT_OK !== '0'">
+          <p-message severity="warn" text="Cet article a déjà été mis à jour."></p-message>
+          <p-checkbox [(ngModel)]="this.isAjoutStock" [binary]="true" inputId="ny" />
+          <label for="ny" class="ml-2">Ajouter au Stock</label>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+          <p-button *ngIf="this.selectedPdt.SYSINVENT_OK !=='0'" severity="danger" icon="pi pi-times"  iconPos="right" (click)="confirmCancel()" label="Annuler la MAJ"></p-button>
+          <p-progressSpinner *ngIf="loading" [style]="{width: '50px', height: '50px'}"></p-progressSpinner>
+          <p-button icon="pi pi-check"  iconPos="right" (click)="onUpdate()" label="Valider" pAutoFocus [autofocus]="true"></p-button>
+      </ng-template>
+    </p-dialog>
+  </div>
+
+  <div class="card flex justify-content-center">
+    <p-dialog header="Confirmation" [(visible)]="visibleCancel" [modal]="true" [style]="{ width: '20rem' }"
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+      <ng-template pTemplate="body">
+        <div>
+          <p>
+            Voulez-vous annuler la mise à jour du stock ?
+          </p>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <p-button severity="danger" (click)="cancelUpdate()" icon="pi pi-times" label="ANNULER L'INVENTAIRE"></p-button>
+      </ng-template>
+    </p-dialog>
+  </div>
+  
 </div>
